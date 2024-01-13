@@ -1,8 +1,8 @@
-# Car-Price-Prediction
-
 # Car Price Prediction ML Project
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+### Author : Rahul Bhoyar
 
 ## Overview
 
