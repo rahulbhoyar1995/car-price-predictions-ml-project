@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+</head>
+<body>
+    <h1>Car Price Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="Year">Year:</label>
+        <input type="text" name="Year" required><br>
+
+        <label for="Present_Price">Present Price:</label>
+        <input type="text" name="Present_Price" required><br>
+
+        <label for="Kms_Driven">Kms Driven:</label>
+        <input type="text" name="Kms_Driven" required><br>
+
+        <label for="Owner">Owner:</label>
+        <input type="text" name="Owner" required><br>
+
+        <label for="Fuel_Type_Petrol">Fuel Type (Petrol/Diesel):</label>
+        <select name="Fuel_Type_Petrol" required>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+        </select><br>
+
+        <label for="Seller_Type_Individual">Seller Type (Individual/Dealer):</label>
+        <select name="Seller_Type_Individual" required>
+            <option value="Individual">Individual</option>
+            <option value="Dealer">Dealer</option>
+        </select><br>
+
+        <label for="Transmission_Mannual">Transmission (Mannual/Automatic):</label>
+        <select name="Transmission_Mannual" required>
+            <option value="Mannual">Mannual</option>
+            <option value="Automatic">Automatic</option>
+        </select><br>
+
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction_text %}
+        <p>{{ prediction_text }}</p>
+    {% elif prediction_texts %}
+        <p>{{ prediction_texts }}</p>
+    {% endif %}
+</body>
+</html>
