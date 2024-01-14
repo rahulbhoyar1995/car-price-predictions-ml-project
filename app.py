@@ -1,54 +1,59 @@
 from flask import Flask, render_template, request
-import jsonify
-import requests
 import pickle
 import numpy as np
-import sklearn
 from sklearn.preprocessing import StandardScaler
+
 app = Flask(__name__)
 model = pickle.load(open('random_forest_regression_model.pkl', 'rb'))
-@app.route('/',methods=['GET'])
-def Home():
+
+@app.route('/', methods=['GET'])
+def home():
     return render_template('index.html')
 
-
-standard_to = StandardScaler()
 @app.route("/predict", methods=['POST'])
 def predict():
-    Fuel_Type_Diesel=0
+    fuel_type_diesel = 0
     if request.method == 'POST':
-        Year = int(request.form['Year'])
-        Present_Price=float(request.form['Present_Price'])
-        Kms_Driven=int(request.form['Kms_Driven'])
-        Kms_Driven2=np.log(Kms_Driven)
-        Owner=int(request.form['Owner'])
-        Fuel_Type_Petrol=request.form['Fuel_Type_Petrol']
-        if(Fuel_Type_Petrol=='Petrol'):
-                Fuel_Type_Petrol=1
-                Fuel_Type_Diesel=0
+        year = int(request.form['Year'])
+        present_price = float(request.form['Present_Price'])
+        kms_driven = int(request.form['Kms_Driven'])
+        kms_driven_2 = np.log(kms_driven)
+        owner = int(request.form['Owner'])
+        fuel_type_petrol = request.form['Fuel_Type_Petrol']
+        
+        if fuel_type_petrol == 'Petrol':
+            fuel_type_petrol = 1
+            fuel_type_diesel = 0
         else:
-            Fuel_Type_Petrol=0
-            Fuel_Type_Diesel=1
-        Year=2020-Year
-        Seller_Type_Individual=request.form['Seller_Type_Individual']
-        if(Seller_Type_Individual=='Individual'):
-            Seller_Type_Individual=1
+            fuel_type_petrol = 0
+            fuel_type_diesel = 1
+        
+        year = 2020 - year
+        seller_type_individual = request.form['Seller_Type_Individual']
+        
+        if seller_type_individual == 'Individual':
+            seller_type_individual = 1
         else:
-            Seller_Type_Individual=0	
-        Transmission_Mannual=request.form['Transmission_Mannual']
-        if(Transmission_Mannual=='Mannual'):
-            Transmission_Mannual=1
+            seller_type_individual = 0
+        
+        transmission_manual = request.form['Transmission_Mannual']
+        
+        if transmission_manual == 'Mannual':
+            transmission_manual = 1
         else:
-            Transmission_Mannual=0
-        prediction=model.predict([[Present_Price,Kms_Driven2,Owner,Year,Fuel_Type_Diesel,Fuel_Type_Petrol,Seller_Type_Individual,Transmission_Mannual]])
-        output=round(prediction[0],2)
-        if output<0:
-            return render_template('index.html',prediction_texts="Sorry you cannot sell this car")
+            transmission_manual = 0
+        
+        prediction = model.predict([[present_price, kms_driven_2, owner, year, fuel_type_diesel,
+                                     fuel_type_petrol, seller_type_individual, transmission_manual]])
+        
+        output = round(prediction[0], 2)
+        
+        if output < 0:
+            return render_template('index.html', prediction_texts="Sorry you cannot sell this car")
         else:
-            return render_template('index.html',prediction_text="You Can Sell The Car at {}".format(output))
+            return render_template('index.html', prediction_text="You Can Sell The Car at {}".format(output))
     else:
         return render_template('index.html')
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(debug=True)
-
